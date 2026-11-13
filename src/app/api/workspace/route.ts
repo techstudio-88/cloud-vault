@@ -1,4 +1,5 @@
 import { randomBytes, createHash } from "node:crypto";
+import { createClient as createSupabaseAdmin } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 export const runtime = "nodejs";
@@ -46,7 +47,20 @@ export async function POST(request: NextRequest) {
       workspace_id: workspace.id, invited_email: email, role, token_hash: tokenHash, invited_by: user.id
     }).select("id,invited_email,role,expires_at,created_at").single();
     if (error) throw error;
-    return NextResponse.json({ invite, inviteUrl: request.nextUrl.origin + "/login?invite=" + token });
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (!serviceKey || !supabaseUrl) {
+      await supabase.from("workspace_invites").delete().eq("id", invite.id).eq("workspace_id", workspace.id);
+      return NextResponse.json({ error: "Invitation email is not configured. Add the server-only Supabase service role key." }, { status: 503 });
+    }
+    const admin = createSupabaseAdmin(supabaseUrl, serviceKey, { auth: { autoRefreshToken: false, persistSession: false } });
+    const next = "/dashboard?invite=" + token;
+    const { error: emailError } = await admin.auth.admin.inviteUserByEmail(email, { redirectTo: request.nextUrl.origin + "/auth/callback?next=" + encodeURIComponent(next), data: { cloudvault_workspace_invite: true, workspace_invite_id: invite.id } });
+    if (emailError) {
+      await supabase.from("workspace_invites").delete().eq("id", invite.id).eq("workspace_id", workspace.id);
+      throw new Error("Could not send invitation email: " + emailError.message);
+    }
+    return NextResponse.json({ invite, inviteUrl: request.nextUrl.origin + "/login?invite=" + token, emailSent: true, message: "Invitation email sent." });
   } catch (error) { return NextResponse.json({ error: error instanceof Error ? error.message : "Could not create invitation." }, { status: 400 }); }
 }
 export async function PATCH(request: NextRequest) {
