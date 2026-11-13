@@ -400,3 +400,27 @@ html,body{background:#f4f3ee;color:#202923}
  .cv-landing .cv-feature-grid,.cv-landing .cv-workflow-grid{grid-template-columns:1fr}
  .cv-landing .cv-feature-card,.cv-landing .cv-workflow-card{min-height:0}
 }
+
+/* CloudVault auth + workspace motion and palette alignment */
+.cv-auth{background:linear-gradient(135deg,#edf3f5 0%,#f7f9f8 52%,#e9f0f2 100%)!important}
+.cv-auth:before{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(#315f8314 1px,transparent 1px);background-size:22px 22px;mask-image:linear-gradient(to bottom,black,transparent 85%)}
+.cv-auth>div[class*="absolute"][class*="blur"]{background:#6e9aab!important;opacity:.18;filter:blur(100px)}
+.cv-auth>div.relative{position:relative;z-index:1;animation:cv-auth-enter .75s cubic-bezier(.2,.75,.25,1) both}
+.cv-auth>div.relative>section:first-child:after{content:"";position:absolute;width:300px;height:300px;right:-170px;top:12%;border:1px solid #8daebb55;border-radius:50%;box-shadow:0 0 0 35px #8daebb0b,0 0 0 70px #8daebb08;pointer-events:none;animation:cv-auth-orbit 30s linear infinite}
+.cv-auth h2{color:#20394b;letter-spacing:-.045em}
+.cv-auth input{color:#20394b!important;transition:border-color .2s,box-shadow .2s,background .2s}
+.cv-auth input:focus{background:#fff!important;box-shadow:0 0 0 4px #4d81951c}
+.cv-auth button{transition:transform .2s,box-shadow .2s,background .2s,border-color .2s}
+.cv-auth button:not(:disabled):hover{transform:translateY(-1px)}
+.cv-auth form>button[type=submit]{background:linear-gradient(110deg,#244b68,#4d8195)!important;box-shadow:0 10px 24px #315f8328!important;color:#fff!important}
+.cv-auth a:focus-visible,.cv-auth button:focus-visible,.cv-auth input:focus-visible{outline:2px solid #4d8195;outline-offset:3px}
+@keyframes cv-auth-enter{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes cv-auth-orbit{to{transform:rotate(360deg)}}
+.cv-shell .text-violet-300,.cv-shell .text-violet-200,.cv-shell .text-violet-400{color:#426f8d!important}
+.cv-shell .accent-violet-400{accent-color:#4d8195!important}
+.cv-shell .cv-content>div{animation:cv-auth-enter .42s ease both}
+.cv-shell .cv-card,.cv-shell .cv-account-card,.cv-shell .cv-stat,.cv-shell .cv-banner{animation:cv-auth-enter .48s ease both}
+.cv-shell .cv-file-row,.cv-shell .cv-account-row,.cv-shell .cv-nav{transition:background .2s,border-color .2s,transform .2s}
+.cv-shell .cv-file-row:hover{transform:translateX(2px)}
+.cv-shell button:focus-visible,.cv-shell a:focus-visible,.cv-shell input:focus-visible,.cv-shell select:focus-visible{outline:2px solid #6d99ad;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.cv-auth *, .cv-auth *:before,.cv-auth *:after,.cv-shell *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
