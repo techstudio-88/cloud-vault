@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -10,6 +10,7 @@ import { createClient } from "@/lib/supabase/client";
 export default function LoginPage() {
   const router = useRouter();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
+  useEffect(() => { if (new URLSearchParams(window.location.search).get("mode") === "signup") setMode("signup"); }, []);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -29,16 +30,16 @@ export default function LoginPage() {
         const params = new URLSearchParams(window.location.search);
         const requestedNext = params.get("next");
         const invite = params.get("invite");
-        const safeNext = requestedNext && requestedNext.startsWith("/") && !requestedNext.startsWith("//") ? requestedNext : "/";
+        const safeNext = requestedNext && requestedNext.startsWith("/") && !requestedNext.startsWith("//") ? requestedNext : "/dashboard";
         const next = invite ? "/?invite=" + encodeURIComponent(invite) : safeNext;
-        router.replace(next);
+        router.replace(next === "/" ? "/dashboard" : next);
         router.refresh();
       } else {
         const { data, error } = await supabase.auth.signUp({
-          email, password, options: { data: { display_name: name }, emailRedirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(new URLSearchParams(location.search).get("invite") ? "/?invite=" + new URLSearchParams(location.search).get("invite") : "/")}` },
+          email, password, options: { data: { display_name: name }, emailRedirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(new URLSearchParams(location.search).get("invite") ? "/?invite=" + new URLSearchParams(location.search).get("invite") : "/dashboard")}` },
         });
         if (error) throw error;
-        if (data.session) { router.replace("/"); router.refresh(); }
+        if (data.session) { router.replace("/dashboard"); router.refresh(); }
         else setMessage("Account created. Check your email to confirm your address, then sign in.");
       }
     } catch (e) {
@@ -49,7 +50,7 @@ export default function LoginPage() {
   async function magicLink() {
     setBusy(true); setError(""); setMessage("");
     try {
-      const { error } = await createClient().auth.signInWithOtp({ email, options: { emailRedirectTo: `${location.origin}/auth/callback` } });
+      const { error } = await createClient().auth.signInWithOtp({ email, options: { emailRedirectTo: `${location.origin}/auth/callback?next=/dashboard` } });
       if (error) throw error;
       setMessage("Magic link sent. Check your inbox.");
     } catch (e) { setError(e instanceof Error ? e.message : "Could not send the magic link."); }
@@ -76,7 +77,7 @@ export default function LoginPage() {
         <div className="absolute -bottom-24 -right-24 h-72 w-72 rounded-full border border-violet-300/10"/><div className="absolute -bottom-16 -right-16 h-56 w-56 rounded-full border border-violet-300/10"/>
       </section>
       <section className="p-6 sm:p-9">
-        <Link href="/" className="mb-8 inline-flex items-center gap-2 text-xs text-slate-500 transition hover:text-white"><ArrowLeft size={14}/> Back to dashboard</Link>
+        <Link href="/" className="mb-8 inline-flex items-center gap-2 text-xs text-slate-500 transition hover:text-white"><ArrowLeft size={14}/> Back to home</Link>
         <div className="mb-7 md:hidden"><div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-blue-500"><Cloud size={22}/></div><div className="text-lg font-bold">Cloud<span className="text-violet-300">Vault</span></div></div>
         <div className="mb-6"><h2 className="text-2xl font-semibold tracking-tight">{mode === "signin" ? "Welcome back" : "Create your account"}</h2><p className="mt-2 text-xs text-slate-500">{mode === "signin" ? "Sign in to continue to your cloud workspace." : "Start building your unified cloud workspace."}</p></div>
         <div className="mb-5 grid grid-cols-2 rounded-xl bg-white/[.04] p-1"><button onClick={()=>{setMode("signin");setError("");setMessage("");}} className={`rounded-lg py-2.5 text-xs font-semibold transition ${mode==="signin"?"bg-white/[.1] text-white":"text-slate-500"}`}>Sign in</button><button onClick={()=>{setMode("signup");setError("");setMessage("");}} className={`rounded-lg py-2.5 text-xs font-semibold transition ${mode==="signup"?"bg-white/[.1] text-white":"text-slate-500"}`}>Create account</button></div>
