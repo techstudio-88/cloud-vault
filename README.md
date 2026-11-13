@@ -22,6 +22,13 @@ CloudVault is a cloud workspace for browsing and organizing connected Google Dri
 - Live provider quota refresh while browsing files
 - Responsive SaaS workspace: functional navigation, account picker, file list, upload dropzone, transfer modal, loading/empty/error states and mobile navigation
 
+## Phase 3 team and automation foundations
+- Email-bound workspace invitations with seven-day expiry and single-use acceptance
+- Owner-managed member role changes and invitation revocation
+- Workspace invitation acceptance requires an authenticated account whose email matches the invitation
+- Automation rule creation, listing, enable/pause and persisted hourly/daily/weekly scheduling metadata
+- Scheduled-rule indexes and run-status fields for the forthcoming durable worker
+
 ## Local development
 Run `npm install`, then `npm run dev`.
 
@@ -55,5 +62,5 @@ Google OAuth may require app verification before public distribution. The curren
 - Cross-account transfers currently support individual files up to 20 MB; folders and larger transfers need a durable background worker.
 - Google Sheets export defaults to CSV; other native Google file types export to PDF.
 - Smart collections are navigation shortcuts at this stage; automatic classification and deduplication are not enabled.
-- Automation center and team invitations are foundations for later releases, not active background automations.
+- Automation rules can be saved and enabled/paused, but they are not executed until the secure scheduled worker is deployed and configured.
 - The current implementation is Google Drive-first. Dropbox, OneDrive and other providers are future work.

@@ -26,13 +26,16 @@ export default function LoginPage() {
       if (mode === "signin") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        const requestedNext = new URLSearchParams(window.location.search).get("next");
-        const next = requestedNext && requestedNext.startsWith("/") && !requestedNext.startsWith("//") ? requestedNext : "/";
+        const params = new URLSearchParams(window.location.search);
+        const requestedNext = params.get("next");
+        const invite = params.get("invite");
+        const safeNext = requestedNext && requestedNext.startsWith("/") && !requestedNext.startsWith("//") ? requestedNext : "/";
+        const next = invite ? "/?invite=" + encodeURIComponent(invite) : safeNext;
         router.replace(next);
         router.refresh();
       } else {
         const { data, error } = await supabase.auth.signUp({
-          email, password, options: { data: { display_name: name }, emailRedirectTo: `${location.origin}/auth/callback` },
+          email, password, options: { data: { display_name: name }, emailRedirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(new URLSearchParams(location.search).get("invite") ? "/?invite=" + new URLSearchParams(location.search).get("invite") : "/")}` },
         });
         if (error) throw error;
         if (data.session) { router.replace("/"); router.refresh(); }
