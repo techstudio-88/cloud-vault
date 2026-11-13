@@ -29,11 +29,10 @@ export async function POST(req:NextRequest){
    return NextResponse.json({subscription:sub,message:"Free plan activated."});
   }
   const price=cycle==="yearly"?plan.yearly_price_inr:plan.monthly_price_inr;
-  const {data:sub,error}=await db.from("user_subscriptions").upsert({owner_id:user.id,plan_id:current?.plan_id??"free",status:"pending",billing_cycle:cycle,updated_at:new Date().toISOString()},{onConflict:"owner_id"}).select("*").single();
-  if(error)throw error;
-  const {data:record,error:billingError}=await db.from("billing_records").insert({owner_id:user.id,subscription_id:sub.id,plan_id:plan.id,amount_inr:price,currency:"INR",status:"pending",billing_period:cycle,description:"Upgrade request: "+plan.name+" ("+cycle+")"}).select("*").single();
+  if(price==null || Number(price)<=0)return NextResponse.json({error:"This plan is not available for paid checkout yet."},{status:400});
+  const {data:record,error:billingError}=await db.from("billing_records").insert({owner_id:user.id,subscription_id:current?.id??null,plan_id:plan.id,amount_inr:price,currency:"INR",status:"pending",billing_period:cycle,description:"Upgrade request: "+plan.name+" ("+cycle+")"}).select("*").single();
   if(billingError)throw billingError;
   await db.from("user_notifications").insert({owner_id:user.id,title:"Upgrade request received",body:"Your request for the "+plan.name+" plan has been recorded. Paid features remain locked until payment verification.",category:"billing"});
-  return NextResponse.json({subscription:sub,billingRecord:record,message:"Upgrade request recorded. Online payment is not configured yet; your current plan limits remain in effect until payment is enabled and confirmed."});
+  return NextResponse.json({subscription:current,billingRecord:record,message:"Upgrade request recorded. Your current plan remains active until a verified payment is received."});
  }catch(e){return NextResponse.json({error:e instanceof Error?e.message:"Could not update subscription."},{status:400});}
 }
