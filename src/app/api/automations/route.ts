@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 const triggers = ["storage_threshold", "scheduled_sync", "duplicate_review", "folder_organization"];
-const schedules = ["hourly", "daily", "weekly"];
+const schedules = ["daily", "weekly"];
 
 export async function GET() {
   const supabase = await createClient();
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     const schedule = schedules.includes(String(body.scheduleInterval)) ? String(body.scheduleInterval) : "daily";
     if (!name) return NextResponse.json({ error: "Give this automation a name." }, { status: 400 });
     if (!triggers.includes(trigger)) return NextResponse.json({ error: "Unsupported automation type." }, { status: 400 });
-    const next = new Date(Date.now() + (schedule === "hourly" ? 3600000 : schedule === "weekly" ? 604800000 : 86400000)).toISOString();
+    const next = new Date(Date.now() + (schedule === "weekly" ? 604800000 : 86400000)).toISOString();
     const { data, error } = await supabase.from("automation_rules").insert({
       owner_id: user.id, name, description: String(body.description ?? "").slice(0, 240),
       enabled: false, trigger_type: trigger, conditions: body.conditions ?? {},
@@ -52,7 +52,7 @@ export async function PATCH(request: NextRequest) {
     if (typeof body.name === "string" && body.name.trim()) patch.name = body.name.trim().slice(0, 80);
     if (typeof body.scheduleInterval === "string" && schedules.includes(body.scheduleInterval)) {
       patch.schedule_interval = body.scheduleInterval;
-      patch.next_run_at = new Date(Date.now() + (body.scheduleInterval === "hourly" ? 3600000 : body.scheduleInterval === "weekly" ? 604800000 : 86400000)).toISOString();
+      patch.next_run_at = new Date(Date.now() + (body.scheduleInterval === "weekly" ? 604800000 : 86400000)).toISOString();
     }
     if (!id || !Object.keys(patch).length) return NextResponse.json({ error: "No valid automation changes supplied." }, { status: 400 });
     const { data, error } = await supabase.from("automation_rules").update(patch).eq("id", id).eq("owner_id", user.id)

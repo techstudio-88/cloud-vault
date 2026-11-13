@@ -29,7 +29,7 @@ CloudVault is a cloud workspace for browsing and organizing connected Google Dri
 - Automation rule creation, listing, enable/pause and persisted hourly/daily/weekly scheduling metadata
 - Scheduled-rule indexes and run-status fields for the forthcoming durable worker
 
-## Phase 4 scheduler configuration\nThe hourly Vercel Cron endpoint is `/api/cron/automations`. Configure `CRON_SECRET` and `SUPABASE_SERVICE_ROLE_KEY` as sensitive Vercel environment variables for Production, Preview and Development. The worker fails closed when either is absent and validates the bearer secret before using the service-role client. Do not expose either value to the browser or commit them.\n\n## Local development
+## Phase 4 scheduler configuration\nThe daily Vercel Cron endpoint is `/api/cron/automations` (the current Vercel Hobby plan permits daily cron execution). Configure `CRON_SECRET` and `SUPABASE_SERVICE_ROLE_KEY` as sensitive Vercel environment variables for Production, Preview and Development. The worker fails closed when either is absent and validates the bearer secret before using the service-role client. Do not expose either value to the browser or commit them.\n\n## Local development
 Run `npm install`, then `npm run dev`.
 
 Copy `.env.example` to `.env.local`. Never commit real credentials.

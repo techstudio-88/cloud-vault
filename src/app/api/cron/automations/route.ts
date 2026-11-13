@@ -6,7 +6,7 @@ export const maxDuration = 60;
 
 function nextRun(interval: string) {
   const now = Date.now();
-  return new Date(now + (interval === "hourly" ? 3600000 : interval === "weekly" ? 604800000 : 86400000)).toISOString();
+  return new Date(now + (interval === "weekly" ? 604800000 : 86400000)).toISOString();
 }
 async function syncAccount(db: any, account: DriveAccount & { workspace_id?: string | null }) {
   const token = await getGoogleAccessToken(account, db);
