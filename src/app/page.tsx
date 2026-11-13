@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Check, ChevronDown, Cloud, Database, Files, FolderSync, Gauge, Globe2, Layers3, LockKeyhole, Menu, Play, Search, ShieldCheck, Sparkles, Zap, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check, ChevronDown, Cloud, Database, Files, FolderSync, Gauge, Globe2, Layers3, LockKeyhole, Menu, Play, Search, ShieldCheck, Sparkles, Zap, X, ArrowLeftRight, ScanSearch, UploadCloud, ChartNoAxesCombined, Users } from "lucide-react";
 
 const featureItems = [
   [Layers3, "One calm workspace", "Bring connected Google Drive accounts into one clear, searchable workspace."],
@@ -63,6 +63,27 @@ export default function LandingPage() {
    </div>
   </section>
   <section className="cv-strip"><div className="cv-strip-inner"><span>BUILT FOR A BETTER FILE WORKFLOW</span><b><Cloud size={16}/> Connected drives</b><b><Search size={16}/> Find things faster</b><b><FolderSync size={16}/> Move with ease</b><b><LockKeyhole size={16}/> Your permissions</b></div></section>
+  <section className="cv-capacity-section">
+   <div className="cv-capacity-copy">
+    <div className="cv-section-kicker">MULTIPLE ACCOUNTS. ONE WORKSPACE.</div>
+    <h2>Your storage setup,<br/><span className="cv-gradient-text">working together.</span></h2>
+    <p>Connect the Google Drive accounts you already use. CloudVault gives you one place to browse them, understand their available space and choose where your files belong.</p>
+    <div className="cv-capacity-points"><span><Check size={14}/> See accounts side by side</span><span><Check size={14}/> Check available space at a glance</span><span><Check size={14}/> Keep each Google account in your control</span></div>
+    <Link href="/login?mode=signup" className="cv-inline-link">Bring your accounts together <ArrowRight size={15}/></Link>
+   </div>
+   <div className="cv-capacity-visual">
+    <div className="cv-capacity-orb"/>
+    <div className="cv-capacity-card">
+     <div className="cv-capacity-card-head"><div><small>YOUR CONNECTED ACCOUNTS</small><b>Storage overview</b></div><span><span/> LIVE VIEW</span></div>
+     <div className="cv-account-row"><span className="cv-account-logo">G</span><div><b>Personal Drive</b><small>Google account 01</small></div><div className="cv-account-meter"><i style={{width:"42%"}}/></div><strong>42%</strong></div>
+     <div className="cv-account-row"><span className="cv-account-logo">G</span><div><b>Work Drive</b><small>Google account 02</small></div><div className="cv-account-meter"><i style={{width:"68%"}}/></div><strong>68%</strong></div>
+     <div className="cv-account-row"><span className="cv-account-logo">G</span><div><b>Archive Drive</b><small>Google account 03</small></div><div className="cv-account-meter"><i style={{width:"24%"}}/></div><strong>24%</strong></div>
+     <div className="cv-capacity-summary"><span className="cv-capacity-summary-icon"><ChartNoAxesCombined size={17}/></span><div><small>YOUR STORAGE, AT A GLANCE</small><b>One combined overview</b></div><span className="cv-summary-check"><Check size={14}/></span></div>
+    </div>
+    <div className="cv-capacity-float"><Layers3 size={15}/> Multiple drives, one view</div>
+   </div>
+   <p className="cv-capacity-footnote">Storage quotas remain separate in each Google account. CloudVault provides a combined view; it does not merge Google's individual quotas into one Google Drive quota. Available space depends on each account's plan and usage.</p>
+  </section>
   <section id="features" className="cv-section">
    <div className="cv-section-kicker">A BETTER WAY TO WORK</div><div className="cv-section-heading"><h2>Everything connected.<br/><span className="cv-muted-gradient">Nothing complicated.</span></h2><p>CloudVault brings the everyday parts of managing cloud storage into one focused workspace—without getting in your way.</p></div>
    <div className="cv-feature-grid">{featureItems.map(([I,title,desc],i)=><article className="cv-feature-card" key={title} style={{animationDelay:(i*70)+"ms"}}><span className="cv-feature-icon"><I size={19}/></span><h3>{title}</h3><p>{desc}</p><span className="cv-feature-index">0{i+1}</span></article>)}</div>
@@ -70,6 +91,15 @@ export default function LandingPage() {
   <section id="how-it-works" className="cv-how-section">
    <div className="cv-how-visual"><div className="cv-how-glow"/><div className="cv-how-card"><div className="cv-how-top"><span className="cv-mini-brand"><Cloud size={12}/></span><b>CloudVault setup</b><span className="cv-setup-status"><Check size={11}/> Ready</span></div><div className="cv-connect-flow"><div className="cv-google-g">G</div><div className="cv-flow-line"><i/></div><div className="cv-cloud-target"><Cloud size={23}/></div></div><div className="cv-connect-title">Your workspace, connected</div><p>One simple place to manage your files.</p><div className="cv-connect-progress"><i/></div><div className="cv-connect-foot"><span>Secure connection</span><span><LockKeyhole size={11}/> Protected</span></div></div><div className="cv-how-floating"><Zap size={14}/> Simple by design</div></div>
    <div className="cv-how-copy"><div className="cv-section-kicker">GET STARTED IN MINUTES</div><h2>Three steps.<br/><span className="cv-gradient-text">One better workflow.</span></h2><p className="cv-how-intro">No complicated setup. Just connect the account you already use and start working from one place.</p><div className="cv-steps">{steps.map(([n,t,d])=><div className="cv-step" key={n}><span>{n}</span><div><h3>{t}</h3><p>{d}</p></div></div>)}</div><Link href="/login?mode=signup" className="cv-inline-link">Create your workspace <ArrowRight size={15}/></Link></div>
+  </section>
+  <section className="cv-workflows-section">
+   <div className="cv-workflows-heading"><div><div className="cv-section-kicker">LESS TAB-HOPPING. MORE FLOW.</div><h2>Small tasks feel easier<br/><span className="cv-gradient-text">when everything connects.</span></h2></div><p>Move through your everyday file tasks from one workspace, with a clear view of where things are stored.</p></div>
+   <div className="cv-workflow-grid">
+    <article className="cv-workflow-card"><span className="cv-workflow-icon"><ScanSearch size={20}/></span><small>01 / FIND</small><h3>Search across your workspace</h3><p>Spend less time remembering which Google account holds a file.</p><div className="cv-search-demo"><Search size={13}/><span>Search files and folders...</span><kbd>⌘ K</kbd></div></article>
+    <article className="cv-workflow-card"><span className="cv-workflow-icon"><ArrowLeftRight size={20}/></span><small>02 / ORGANIZE</small><h3>Move files between accounts</h3><p>Keep your files organized across the connected drives you choose.</p><div className="cv-transfer-demo"><span><Cloud size={14}/> Drive 01</span><ArrowRight size={16}/><span><Cloud size={14}/> Drive 02</span></div></article>
+    <article className="cv-workflow-card"><span className="cv-workflow-icon"><UploadCloud size={20}/></span><small>03 / UPLOAD</small><h3>Choose where uploads go</h3><p>Pick the destination account that makes sense for your storage setup.</p><div className="cv-upload-demo"><span><UploadCloud size={15}/> project-files.zip</span><span className="cv-upload-ready"><Check size={12}/> Destination selected</span></div></article>
+    <article className="cv-workflow-card"><span className="cv-workflow-icon"><Users size={20}/></span><small>04 / COLLABORATE</small><h3>Keep your workspace in order</h3><p>Give your team a consistent place to work with connected cloud files.</p><div className="cv-team-demo"><i>Y</i><i>A</i><i>M</i><span>Workspace members</span></div></article>
+   </div>
   </section>
   <section id="security" className="cv-security-section"><div className="cv-security-icon"><ShieldCheck size={25}/></div><div><div className="cv-section-kicker">YOUR DATA. YOUR CONTROL.</div><h2>Designed to work with the permissions you choose.</h2><p>CloudVault connects to Google Drive using the access you authorize. Your original files remain in your Google account, and you can manage connected accounts from your workspace.</p></div><div className="cv-security-points"><div><Check size={15}/> Google sign-in</div><div><Check size={15}/> Permission-based access</div><div><Check size={15}/> Files remain in Drive</div></div></section>
   <section id="faq" className="cv-faq-section"><div className="cv-section-kicker">GOOD TO KNOW</div><div className="cv-faq-layout"><div><h2>Questions?<br/><span className="cv-gradient-text">We've got clarity.</span></h2><p>Everything you need to know before creating your workspace.</p></div><div className="cv-faq-list">{faqs.map(([q,a],i)=><div className={"cv-faq-item "+(openFaq===i?"open":"")} key={q}><button onClick={()=>setOpenFaq(openFaq===i?null:i)} aria-expanded={openFaq===i}><span>{q}</span><ChevronDown size={17}/></button>{openFaq===i&&<p>{a}</p>}</div>)}</div></div></section>
