@@ -56,3 +56,124 @@
 @media(max-width:1000px){.cv-capacity-section{gap:35px}.cv-workflow-grid{grid-template-columns:repeat(2,1fr)}.cv-workflow-card{min-height:220px}}
 @media(max-width:700px){.cv-capacity-section{padding:75px 18px 78px;grid-template-columns:1fr;gap:25px}.cv-capacity-copy h2,.cv-workflows-heading h2{font-size:39px}.cv-capacity-visual{min-height:320px}.cv-capacity-card{padding:16px;transform:none}.cv-account-row{grid-template-columns:30px minmax(90px,1fr) minmax(55px,.8fr) 28px;gap:7px;padding:14px 0}.cv-capacity-float{right:-2px;bottom:0}.cv-capacity-footnote{font-size:8px;margin-top:5px}.cv-workflows-section{padding:72px 18px 80px}.cv-workflows-heading{display:block;margin-bottom:25px}.cv-workflows-heading>p{margin-top:17px}.cv-workflow-grid{gap:9px}.cv-workflow-card{padding:16px;min-height:235px}.cv-workflow-card h3{font-size:12px}.cv-workflow-card>p{font-size:8px}}
 @media(max-width:390px){.cv-workflow-grid{grid-template-columns:1fr}.cv-workflow-card{min-height:0}.cv-workflow-card>p{min-height:0}}
+
+
+/* CloudVault design refinement — quiet, editorial, product-first */
+:root{color-scheme:light}
+html,body{background:#f4f3ee;color:#202923}
+::selection{background:#d9e6d8;color:#20352a}
+.cv-landing{background:#f4f3ee!important;color:#202923!important;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.cv-landing .cv-ambient,.cv-landing .cv-orbit,.cv-landing .cv-float-tag,.cv-landing .cv-fly-card,.cv-landing .cv-capacity-orb,.cv-landing .cv-how-glow,.cv-landing .cv-cta-orb{display:none!important}
+.cv-landing .cv-landing-nav{height:76px;padding:0 max(34px,calc((100vw - 1210px)/2));background:#f4f3ee;border-bottom:1px solid #dedfd8;backdrop-filter:none}
+.cv-landing .cv-brand{color:#202923;font-size:17px;letter-spacing:-.055em;font-weight:750}
+.cv-landing .cv-brand>span:last-child>span{color:#58745f}
+.cv-landing .cv-brand-mark,.cv-landing .cv-mini-brand{background:#263c31;color:#f7f7f1;border-radius:9px;box-shadow:none}
+.cv-landing .cv-desktop-links{gap:29px}
+.cv-landing .cv-desktop-links a,.cv-landing .cv-nav-signin{color:#59645c;font-size:11px;font-weight:550}
+.cv-landing .cv-desktop-links a:hover,.cv-landing .cv-nav-signin:hover{color:#263c31}
+.cv-landing .cv-nav-cta,.cv-landing .cv-button-primary{background:#263c31;color:#fff;border:1px solid #263c31;border-radius:6px;box-shadow:none;font-weight:600}
+.cv-landing .cv-nav-cta:hover,.cv-landing .cv-button-primary:hover{background:#3d5946;transform:translateY(-1px);box-shadow:none}
+.cv-landing .cv-mobile-menu{color:#263c31;border-color:#d4d8cf}
+.cv-landing .cv-hero{max-width:1280px;min-height:650px;padding:105px 34px 95px;grid-template-columns:1fr 1.08fr;gap:65px}
+.cv-landing .cv-eyebrow,.cv-landing .cv-section-kicker{color:#607363;letter-spacing:.16em;font-size:9px;font-weight:700}
+.cv-landing .cv-live-dot{background:#6c9271;box-shadow:none}
+.cv-landing .cv-hero h1{color:#202923;font-size:clamp(54px,6.3vw,78px);line-height:.99;letter-spacing:-.075em;font-weight:680}
+.cv-landing .cv-gradient-text,.cv-landing .cv-muted-gradient{background:none!important;-webkit-text-fill-color:initial!important;color:#66816a!important}
+.cv-landing .cv-hero-lede{color:#68736a;font-size:14px;line-height:1.9;max-width:450px}
+.cv-landing .cv-button-primary{padding:14px 19px;font-size:11px}
+.cv-landing .cv-button-quiet{color:#47564a;font-size:11px}
+.cv-landing .cv-play{background:#e4e9df;color:#3c5942}
+.cv-landing .cv-proof-row{color:#737d73;font-size:9px}
+.cv-landing .cv-proof-icon{color:#5f8066}
+.cv-landing .cv-product-window,.cv-landing .cv-capacity-card,.cv-landing .cv-how-card{background:#fff;border:1px solid #dfe2da;border-radius:10px;box-shadow:0 24px 65px #263c3110;animation:none;transform:none}
+.cv-landing .cv-window-top,.cv-landing .cv-how-top{border-bottom:1px solid #eceee8;color:#29352d}
+.cv-landing .cv-window-top>div:last-child i{background:#d4d8d0}
+.cv-landing .cv-window-body{background:#fff}
+.cv-landing .cv-window-sidebar{background:#f7f8f4;border-right:1px solid #eceee8;color:#7a8479}
+.cv-landing .cv-window-side-active{background:#e7eee5;color:#38543e}
+.cv-landing .cv-window-content{background:#fff}
+.cv-landing .cv-window-heading h3,.cv-landing .cv-window-files-head b,.cv-landing .cv-file-preview b,.cv-landing .cv-window-metrics strong{color:#26352b}
+.cv-landing .cv-window-heading small,.cv-landing .cv-window-metrics small,.cv-landing .cv-file-preview small,.cv-landing .cv-window-storage small{color:#8a9389}
+.cv-landing .cv-window-avatar{background:#e6ede3;color:#405c45}
+.cv-landing .cv-window-metrics>div{background:#f7f8f4;border:1px solid #edf0e9;border-radius:6px}
+.cv-landing .cv-file-preview{border-bottom:1px solid #f0f1ed}
+.cv-landing .cv-file-symbol{border-radius:6px}
+.cv-landing .cv-window-storage{background:#f7f8f4;border:1px solid #edf0e9;border-radius:6px}
+.cv-landing .cv-storage-track{background:#e2e6df}
+.cv-landing .cv-storage-track i,.cv-landing .cv-account-meter i,.cv-landing .cv-flow-line i,.cv-landing .cv-connect-progress i{background:#718e72}
+.cv-landing .cv-strip{background:#e9ece5;border-block:1px solid #dfe3da}
+.cv-landing .cv-strip-inner{max-width:1210px;color:#718071}
+.cv-landing .cv-strip-inner b{color:#455648;font-weight:600}
+.cv-landing .cv-capacity-section,.cv-landing .cv-section,.cv-landing .cv-how-section,.cv-landing .cv-workflows-section,.cv-landing .cv-faq-section{color:#202923}
+.cv-landing .cv-capacity-copy h2,.cv-landing .cv-workflows-heading h2,.cv-landing .cv-section-heading h2,.cv-landing .cv-how-copy h2,.cv-landing .cv-faq-layout h2{color:#202923;font-weight:670;letter-spacing:-.065em}
+.cv-landing .cv-capacity-copy>p,.cv-landing .cv-workflows-heading>p,.cv-landing .cv-section-heading>p,.cv-landing .cv-how-intro,.cv-landing .cv-faq-layout>div:first-child>p{color:#6c776d;font-size:12px;line-height:1.9}
+.cv-landing .cv-capacity-points span{color:#48574a}
+.cv-landing .cv-capacity-points svg,.cv-landing .cv-security-points svg{color:#66856a}
+.cv-landing .cv-inline-link{color:#48684e;font-weight:650}
+.cv-landing .cv-capacity-card-head b,.cv-landing .cv-account-row b,.cv-landing .cv-capacity-summary b{color:#2b382e}
+.cv-landing .cv-capacity-card-head small,.cv-landing .cv-capacity-summary small,.cv-landing .cv-account-row small{color:#8a9388}
+.cv-landing .cv-account-row{border-color:#edf0e9;animation:none}
+.cv-landing .cv-account-logo{border:1px solid #e8ece5}
+.cv-landing .cv-capacity-summary{background:#f3f6f0;border-color:#e3e9df}
+.cv-landing .cv-capacity-summary-icon{background:#e3ebdf;color:#527256}
+.cv-landing .cv-summary-check{background:#e3eee1;color:#4f7654}
+.cv-landing .cv-capacity-footnote{color:#8b9389}
+.cv-landing .cv-feature-card,.cv-landing .cv-workflow-card{background:#fff;border:1px solid #e1e4dc;border-radius:8px;box-shadow:none;animation:none}
+.cv-landing .cv-feature-card:hover,.cv-landing .cv-workflow-card:hover{background:#fff;border-color:#9eaf9d;transform:translateY(-2px)}
+.cv-landing .cv-feature-icon,.cv-landing .cv-workflow-icon{background:#edf2e9;border:1px solid #e2e9df;color:#56735a;border-radius:7px}
+.cv-landing .cv-feature-card h3,.cv-landing .cv-workflow-card h3{color:#29372d;font-weight:650}
+.cv-landing .cv-feature-card p,.cv-landing .cv-workflow-card>p{color:#778177;font-size:10px}
+.cv-landing .cv-feature-index,.cv-landing .cv-workflow-card>small{color:#899688}
+.cv-landing .cv-how-card{padding:25px}
+.cv-landing .cv-google-g{border:1px solid #e7eae4;box-shadow:none}
+.cv-landing .cv-cloud-target{background:#e6eee3;color:#4e6d52;box-shadow:none}
+.cv-landing .cv-connect-title{color:#2b392e}
+.cv-landing .cv-how-card>p,.cv-landing .cv-connect-foot{color:#7d887d}
+.cv-landing .cv-connect-progress{background:#e8ece5}
+.cv-landing .cv-connect-foot span:last-child,.cv-landing .cv-setup-status{color:#56785b}
+.cv-landing .cv-step{border-color:#e5e8e1}
+.cv-landing .cv-step>span{background:#edf2e9;border:1px solid #e0e8dd;color:#557258}
+.cv-landing .cv-step h3{color:#29372d}
+.cv-landing .cv-step p{color:#7b857b}
+.cv-landing .cv-security-section{background:#e9eee6;border:1px solid #dce4d9;border-radius:9px}
+.cv-landing .cv-security-icon{background:#dce8d9;color:#4e6d52}
+.cv-landing .cv-security-section h2{color:#29372d}
+.cv-landing .cv-security-section p,.cv-landing .cv-security-points{color:#68766a}
+.cv-landing .cv-faq-list,.cv-landing .cv-faq-item{border-color:#dfe3da}
+.cv-landing .cv-faq-item button{color:#29372d;font-size:12px}
+.cv-landing .cv-faq-item button svg{color:#66816a}
+.cv-landing .cv-faq-item>p{color:#6e796f;font-size:11px}
+.cv-landing .cv-final-cta{background:#263c31;border:0;border-radius:10px;box-shadow:none}
+.cv-landing .cv-final-cta .cv-section-kicker{color:#c3d0bd}
+.cv-landing .cv-final-cta h2{color:#fff}
+.cv-landing .cv-final-cta .cv-gradient-text{color:#c5d6bc!important}
+.cv-landing .cv-final-cta>p{color:#d1d9cf}
+.cv-landing .cv-final-cta .cv-button-primary{background:#f2f3ec;color:#263c31;border-color:#f2f3ec}
+.cv-landing .cv-cta-note{color:#c3cec1}
+.cv-landing .cv-cta-note svg{color:#c5d6bc}
+.cv-landing .cv-footer{border-color:#dfe3da}
+.cv-landing .cv-footer .cv-brand{color:#263c31}
+.cv-landing .cv-footer>span,.cv-landing .cv-footer>div a{color:#7d887d}
+.cv-landing .cv-mobile-links{background:#fff;border-color:#dfe3da;box-shadow:0 18px 40px #263c3118}
+.cv-landing .cv-mobile-links a{color:#405144}
+.cv-landing .cv-search-demo,.cv-landing .cv-transfer-demo,.cv-landing .cv-upload-demo,.cv-landing .cv-team-demo{background:#f7f8f4;border-color:#e9ece5;color:#647064}
+.cv-landing .cv-search-demo>span{color:#879087}
+.cv-landing .cv-search-demo kbd{border-color:#dce2d8;color:#697669}
+.cv-landing .cv-upload-ready{color:#547a59}
+.cv-landing .cv-team-demo i{border-color:#fff}
+.cv-landing a:focus-visible,.cv-landing button:focus-visible{outline:2px solid #638567;outline-offset:3px}
+.cv-landing button,.cv-landing a{transition:color .16s ease,background-color .16s ease,border-color .16s ease,transform .16s ease}
+.cv-sidebar{background:#26372e!important;border-right:1px solid #34473a!important;backdrop-filter:none!important}
+.cv-main{background:#f4f3ee!important;color:#26342a}
+.cv-topbar{background:#f4f3ee!important;border-bottom:1px solid #e0e3dc!important;backdrop-filter:none!important}
+.cv-content{color:#26342a}
+.cv-stat,.cv-card,.cv-account-card{background:#fff!important;border:1px solid #e2e5de!important;border-radius:9px!important;box-shadow:none!important}
+.cv-stat:hover,.cv-account-card:hover{border-color:#b7c5b3!important;transform:translateY(-1px)}
+.cv-nav{border-radius:6px;color:#c1cabe!important}
+.cv-nav:hover{background:#ffffff0e!important;color:#fff!important}
+.cv-nav.active{background:#ffffff16!important;box-shadow:inset 2px 0 #b7c9ad!important;color:#fff!important}
+.cv-logo{background:#718b70!important;box-shadow:none!important;border-radius:8px!important}
+.cv-avatar{background:#e0e9dc!important;color:#405a43!important}
+@media(max-width:1050px){.cv-landing .cv-hero{grid-template-columns:1fr;padding-top:75px;gap:35px}.cv-landing .cv-hero-copy{text-align:center}.cv-landing .cv-hero-copy .cv-eyebrow,.cv-landing .cv-hero-actions,.cv-landing .cv-proof-row{justify-content:center}}
+@media(max-width:700px){.cv-landing .cv-landing-nav{height:68px;padding:0 18px}.cv-landing .cv-hero{padding:66px 18px 62px}.cv-landing .cv-hero h1{font-size:clamp(43px,12vw,60px)}.cv-landing .cv-final-cta{margin:0 18px 45px}.cv-landing .cv-capacity-card{transform:none}.cv-landing .cv-feature-card,.cv-landing .cv-workflow-card{box-shadow:none}}
+@media(prefers-reduced-motion:reduce){.cv-landing *, .cv-landing *:before,.cv-landing *:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
