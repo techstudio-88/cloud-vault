@@ -31,7 +31,7 @@ export default function LoginPage() {
         const requestedNext = params.get("next");
         const invite = params.get("invite");
         const safeNext = requestedNext && requestedNext.startsWith("/") && !requestedNext.startsWith("//") ? requestedNext : "/dashboard";
-        const next = invite ? "/?invite=" + encodeURIComponent(invite) : safeNext;
+        const next = invite ? "/dashboard?invite=" + encodeURIComponent(invite) : safeNext;
         router.replace(next === "/" ? "/dashboard" : next);
         router.refresh();
       } else {
