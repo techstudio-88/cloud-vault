@@ -53,7 +53,7 @@ export default function HomePage(){
  const updateAutomation=async(rule:any)=>{try{const r=await fetch("/api/automations",{method:"PATCH",headers:{"content-type":"application/json"},body:JSON.stringify({id:rule.id,enabled:!rule.enabled})});const d=await r.json();if(!r.ok)throw new Error(d.error??"Could not update rule.");setAutomationRules(v=>v.map(x=>x.id===rule.id?{...x,...d.rule}:x));}catch(e){notify(e instanceof Error?e.message:"Could not update rule.");}};
  const openFolder=(f:DriveFile)=>{setCrumbs(v=>[...v,{id:f.id,name:f.name}]);setFolderId(f.id);setQuery("");};
  const goCrumb=(i:number)=>{setCrumbs(i<0?[]:crumbs.slice(0,i+1));setFolderId(i<0?"root":crumbs[i].id);};
- const signOut=async()=>{await supabase.auth.signOut();setUser(null);notify("Signed out.");};
+ const signOut=async()=>{await supabase.auth.signOut();location.assign("/");};
  const title=active==="Overview"?"Your cloud at a glance":active==="My Cloud"?"All your files, in one place":active;
  if(loading)return <main className="min-h-screen grid place-items-center bg-[#090b12] text-slate-400"><LoaderCircle className="animate-spin mr-2 inline" size={18}/>Loading CloudVault…</main>;
  return <main className="cv-shell min-h-screen bg-[#090b12] text-white">
