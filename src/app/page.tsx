@@ -20,7 +20,13 @@ export default function HomePage(){
      setConnectedDrives((data??[]).map((a,i)=>({name:a.display_name||a.email||"Google Drive",email:a.email||"",used:Number(a.storage_used_bytes??0)/1024**3,total:Number(a.storage_total_bytes??0)/1024**3,tone:["from-violet-500 to-indigo-500","from-sky-400 to-blue-600","from-emerald-400 to-teal-600"][i%3]})));
    };
    void refresh();
-   const {data:{subscription}}=supabase.auth.onAuthStateChange(()=>{void refresh();});
+   const {data:{subscription}}=supabase.auth.onAuthStateChange((_event,session)=>{
+     setUserEmail(session?.user?.email??null);
+     if(!session?.user){setConnectedDrives([]);return;}
+     void supabase.from("connected_accounts").select("email,display_name,storage_used_bytes,storage_total_bytes,status").eq("owner_id",session.user.id).eq("status","connected").then(({data})=>{
+       setConnectedDrives((data??[]).map((a,i)=>({name:a.display_name||a.email||"Google Drive",email:a.email||"",used:Number(a.storage_used_bytes??0)/1024**3,total:Number(a.storage_total_bytes??0)/1024**3,tone:["from-violet-500 to-indigo-500","from-sky-400 to-blue-600","from-emerald-400 to-teal-600"][i%3]})));
+     });
+   });
    const params=new URLSearchParams(window.location.search);
    if(params.get("connected")==="google")setToast("Google Drive connected successfully.");
    const issue=params.get("connect_error");
