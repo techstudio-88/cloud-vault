@@ -8,13 +8,13 @@ export async function GET(req:NextRequest){
  const view=req.nextUrl.searchParams.get("view")||"overview";
  const q=req.nextUrl.searchParams.get("q")||"";
  const calls:Record<string,()=>Promise<any>>={
-  overview:()=>db.rpc("admin_dashboard_snapshot"),
+  overview:async()=>await db.rpc("admin_dashboard_snapshot"),
   users:async()=>{const [u,s]=await Promise.all([db.rpc("admin_list_users",{search_term:q}),db.rpc("admin_dashboard_snapshot")]);if(u.error)return u;if(s.error)return s;return {data:{users:u.data,plans:s.data?.plans||[]},error:null};},
-  accounts:()=>db.rpc("admin_list_accounts",{search_term:q}),
-  files:()=>db.rpc("admin_list_files",{search_term:q}),
-  jobs:()=>db.rpc("admin_list_jobs"),
-  billing:()=>db.rpc("admin_list_billing"),
-  tickets:()=>db.rpc("admin_list_support_tickets")
+  accounts:async()=>await db.rpc("admin_list_accounts",{search_term:q}),
+  files:async()=>await db.rpc("admin_list_files",{search_term:q}),
+  jobs:async()=>await db.rpc("admin_list_jobs"),
+  billing:async()=>await db.rpc("admin_list_billing"),
+  tickets:async()=>await db.rpc("admin_list_support_tickets")
  };
  if(!calls[view])return NextResponse.json({error:"Unknown admin view."},{status:400});
  const {data,error}=await calls[view]();if(error)return forbidden(error.message);
