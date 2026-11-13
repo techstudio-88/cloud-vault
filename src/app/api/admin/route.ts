@@ -5,7 +5,12 @@ export async function GET(req:NextRequest){
  const db=await createClient();const {data:{user}}=await db.auth.getUser();
  if(!user)return NextResponse.json({error:"Sign in required."},{status:401});
  const view=req.nextUrl.searchParams.get("view")||"overview";
- const call=view==="users"?db.rpc("admin_list_users",{search_term:req.nextUrl.searchParams.get("q")||""}):view==="tickets"?db.rpc("admin_list_support_tickets"):db.rpc("admin_dashboard_snapshot");
+ if(view==="users"){
+  const [u,s]=await Promise.all([db.rpc("admin_list_users",{search_term:req.nextUrl.searchParams.get("q")||""}),db.rpc("admin_dashboard_snapshot")]);
+  if(u.error||s.error){const e=u.error||s.error!;return NextResponse.json({error:e.message},{status:/admin access/i.test(e.message)?403:400});}
+  return NextResponse.json({data:{users:u.data,plans:s.data?.plans||[]}});
+ }
+ const call=view==="tickets"?db.rpc("admin_list_support_tickets"):db.rpc("admin_dashboard_snapshot");
  const {data,error}=await call;if(error)return NextResponse.json({error:error.message},{status:/admin access/i.test(error.message)?403:400});
  return NextResponse.json({data});
 }

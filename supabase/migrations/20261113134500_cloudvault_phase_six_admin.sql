@@ -6,7 +6,7 @@ create table if not exists platform_private.audit_logs(id uuid primary key defau
 create index if not exists platform_admin_audit_created_idx on platform_private.audit_logs(created_at desc);
 create table if not exists platform_private.support_tickets(id uuid primary key default gen_random_uuid(),user_id uuid references auth.users(id) on delete set null,subject text not null,message text not null,status text not null default 'open' check(status in('open','in_progress','resolved','closed')),priority text not null default 'normal' check(priority in('low','normal','high','urgent')),created_at timestamptz not null default now(),updated_at timestamptz not null default now());
 create index if not exists platform_support_status_created_idx on platform_private.support_tickets(status,created_at desc);
-insert into platform_private.admins(user_id) select id from auth.users order by created_at asc limit 1 on conflict do nothing;
+insert into platform_private.admins(user_id) values('c8d8fbd4-ad41-44db-b275-a129807bde75') on conflict do nothing;
 create or replace function platform_private.is_admin() returns boolean language sql stable security definer set search_path='' as $$ select exists(select 1 from platform_private.admins a where a.user_id=(select auth.uid())) $$;
 revoke all on function platform_private.is_admin() from public,anon,authenticated;
 create or replace function public.admin_dashboard_snapshot() returns jsonb language plpgsql security definer set search_path='' as $$
