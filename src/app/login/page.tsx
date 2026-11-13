@@ -36,7 +36,7 @@ export default function LoginPage() {
         router.refresh();
       } else {
         const { data, error } = await supabase.auth.signUp({
-          email, password, options: { data: { display_name: name }, emailRedirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(new URLSearchParams(location.search).get("invite") ? "/?invite=" + new URLSearchParams(location.search).get("invite") : "/dashboard")}` },
+          email, password, options: { data: { display_name: name }, emailRedirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(new URLSearchParams(location.search).get("invite") ? "/dashboard?invite=" + new URLSearchParams(location.search).get("invite") : "/dashboard")}` },
         });
         if (error) throw error;
         if (data.session) { router.replace("/dashboard"); router.refresh(); }
