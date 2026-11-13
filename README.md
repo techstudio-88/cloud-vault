@@ -67,3 +67,13 @@ Google OAuth may require app verification before public distribution. The curren
 - Duplicate finder compares provider MD5 checksums and file sizes across connected drives; it reports candidates but never deletes files automatically.
 - Folder-organization automation produces reviewable suggestions only; it never moves user files without explicit action.
 - The current implementation is Google Drive-first. Dropbox, OneDrive and other providers are future work.
+
+
+## Phase 5 — SaaS workspace
+
+- Free, Pro and Team plan catalog with storage, connected-account and seat allowances.
+- Server-side enforcement for CloudVault storage allowance, Google Drive connection count and pending workspace invitations.
+- Subscription state and billing request history persisted in Supabase.
+- In-app notification center with read/unread state.
+- Paid plan requests are recorded as pending. No payment gateway is configured, and paid features are not unlocked until a provider and verified payment flow are connected.
+- Plan catalog currently uses configurable null pricing for paid tiers; configure prices and checkout before accepting payments.

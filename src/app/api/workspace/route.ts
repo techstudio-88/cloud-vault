@@ -33,6 +33,13 @@ export async function POST(request: NextRequest) {
     if (email === user.email?.toLowerCase()) return NextResponse.json({ error: "You are already the workspace owner." }, { status: 400 });
     const { data: workspace } = await supabase.from("workspaces").select("id").eq("owner_id", user.id).limit(1).maybeSingle();
     if (!workspace) return NextResponse.json({ error: "Only the workspace owner can invite teammates." }, { status: 403 });
+    const {data:sub}=await supabase.from("user_subscriptions").select("plan_id").eq("owner_id",user.id).maybeSingle();
+    const {data:plan}=await supabase.from("subscription_plans").select("seat_limit").eq("id",sub?.plan_id??"free").single();
+    const [{count:memberCount},{count:inviteCount}]=await Promise.all([
+      supabase.from("workspace_members").select("*",{count:"exact",head:true}).eq("workspace_id",workspace.id),
+      supabase.from("workspace_invites").select("*",{count:"exact",head:true}).eq("workspace_id",workspace.id).is("accepted_at",null)
+    ]);
+    if(plan&&1+(memberCount??0)+(inviteCount??0)>=plan.seat_limit)return NextResponse.json({error:"Your plan's workspace seat limit has been reached. Upgrade to invite more teammates."},{status:402});
     const token = randomBytes(32).toString("hex");
     const tokenHash = createHash("sha256").update(token).digest("hex");
     const { data: invite, error } = await supabase.from("workspace_invites").insert({

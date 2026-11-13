@@ -70,6 +70,14 @@ export async function GET(request: NextRequest) {
     const drive = await driveResponse.json();
     if (!profile.id || !profile.email) return fail(request, "google_account_unavailable");
 
+    const {data:existingAccount}=await supabase.from("connected_accounts").select("id").eq("owner_id",user.id).eq("provider","google_drive").eq("provider_account_id",profile.id).maybeSingle();
+    if(!existingAccount){
+      const {data:sub}=await supabase.from("user_subscriptions").select("plan_id").eq("owner_id",user.id).maybeSingle();
+      const {data:plan}=await supabase.from("subscription_plans").select("connected_account_limit").eq("id",sub?.plan_id??"free").single();
+      const {count}=await supabase.from("connected_accounts").select("*",{count:"exact",head:true}).eq("owner_id",user.id).eq("status","connected");
+      if(plan&&(count??0)>=plan.connected_account_limit)return fail(request,"plan_connected_account_limit_reached");
+    }
+
     const encrypted = encryptTokens(JSON.stringify({
       access_token: tokens.access_token,
       refresh_token: tokens.refresh_token,
