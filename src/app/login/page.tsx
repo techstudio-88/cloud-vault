@@ -1,6 +1,7 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useState } from "react";
+import type { FormEvent } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Cloud, Eye, EyeOff, ArrowLeft, LoaderCircle, ShieldCheck, Sparkles } from "lucide-react";
@@ -81,7 +82,7 @@ export default function LoginPage() {
           <label className="block text-xs text-slate-400">Password<div className="relative mt-2"><input type={showPassword?"text":"password"} autoComplete={mode==="signin"?"current-password":"new-password"} value={password} onChange={e=>setPassword(e.target.value)} required minLength={8} placeholder="At least 8 characters" className="w-full rounded-xl border border-white/[.09] bg-white/[.035] px-4 py-3 pr-11 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-violet-400/60"/><button type="button" onClick={()=>setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500">{showPassword?<EyeOff size={16}/>:<Eye size={16}/>}</button></div></label>
           {error&&<div role="alert" className="rounded-xl border border-rose-400/20 bg-rose-400/[.07] p-3 text-xs leading-relaxed text-rose-200">{error}</div>}
           {message&&<div role="status" className="rounded-xl border border-emerald-400/20 bg-emerald-400/[.07] p-3 text-xs leading-relaxed text-emerald-200">{message}</div>}
-          <button disabled={busy} className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-500 py-3.5 text-xs font-semibold shadow-lg shadow-violet-500/15 transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60">{busy&&<LoaderCircle size={15} className="animate-spin"/ >}{mode==="signin"?"Sign in to CloudVault":"Create account"}</button>
+          <button disabled={busy} className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-500 py-3.5 text-xs font-semibold shadow-lg shadow-violet-500/15 transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60">{busy&&<LoaderCircle size={15} className="animate-spin"/>}{mode==="signin"?"Sign in to CloudVault":"Create account"}</button>
         </form>
         {mode==="signin"&&<button disabled={busy||!email} onClick={magicLink} className="mt-3 w-full rounded-xl border border-white/[.09] py-3 text-xs font-medium text-slate-300 transition hover:bg-white/[.04] disabled:opacity-40">Send me a magic link</button>}
         <div className="my-5 flex items-center gap-3 text-[10px] uppercase tracking-[.15em] text-slate-600"><span className="h-px flex-1 bg-white/[.07]"/>or continue with<span className="h-px flex-1 bg-white/[.07]"/></div>
