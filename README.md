@@ -1,17 +1,26 @@
 # CloudVault
 
-CloudVault is a multi-account cloud storage workspace. Each provider retains its own quota, permissions and source of truth.
+CloudVault is a cloud workspace for browsing and organizing connected Google Drive accounts. Files remain stored in Google Drive; CloudVault stores account metadata, encrypted OAuth credentials and file indexes.
 
 ## Phase 1 foundation
-- Next.js App Router + TypeScript, with a responsive dark dashboard
-- Supabase email/password signup and sign-in, magic links, session refresh and auth callback
-- Personal workspace + profile provisioned automatically when a user signs up
-- Workspace membership model with Row Level Security
-- Google Drive OAuth connect/callback routes
-- Provider token bundle encrypted at rest with AES-256-GCM
-- Connected Google Drive account metadata and storage quota loaded from Supabase
-- Recent file UI preview (sample rows until Drive file indexing is added)
-- Installable app manifest and branded 404 page
+- Next.js App Router + TypeScript responsive SaaS workspace
+- Supabase email/password, magic-link signup/sign-in, auth callback and session refresh
+- Personal workspace and profile bootstrap
+- Workspace membership model and row-level security
+- Google Drive OAuth connection
+- Provider token bundle encrypted server-side with AES-256-GCM
+- Live provider quota metadata and connected-account state
+
+## Phase 2 file engine
+- Live Google Drive file and folder listing, folder navigation and provider-side filename search
+- Create folders and rename files
+- Move files to Google Drive trash (recoverable in the provider's Trash)
+- Download binary files and export Google Docs, Sheets (CSV), Slides and Drawings (PDF)
+- Resumable uploads using 4 MB chunks, with server-side upload sessions and progress reporting
+- Copy individual files between connected Google Drive accounts (20 MB per file in this serverless transfer route)
+- Supabase file metadata index, transfer/upload job records and activity events
+- Live provider quota refresh while browsing files
+- Responsive SaaS workspace: functional navigation, account picker, file list, upload dropzone, transfer modal, loading/empty/error states and mobile navigation
 
 ## Local development
 Run `npm install`, then `npm run dev`.
@@ -22,24 +31,29 @@ Copy `.env.example` to `.env.local`. Never commit real credentials.
 In Supabase Authentication → URL Configuration:
 - Set Site URL to `https://cloudvault-priyanshu-f732.vercel.app`
 - Add `https://cloudvault-priyanshu-f732.vercel.app/auth/callback` to Redirect URLs
-- Configure email confirmation and SMTP before inviting external users
+- Configure email confirmation and production SMTP before inviting external users
 
 ## Google Drive OAuth setup
 1. In Google Cloud Console, create an OAuth Web application and enable the Google Drive API.
 2. Add this exact authorized redirect URI: `https://cloudvault-priyanshu-f732.vercel.app/api/connect/google/callback`.
 3. Configure the OAuth consent screen and add test users while the app is in testing.
-4. Add `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` to the Vercel project for Production, Preview and Development.
-5. `GOOGLE_REDIRECT_URI` and a generated `TOKEN_ENCRYPTION_KEY` are already configured in Vercel. Keep the encryption key secret and never commit it.
-6. Redeploy after adding credentials.
+4. Add `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` to Vercel for Production, Preview and Development.
+5. `GOOGLE_REDIRECT_URI` and `TOKEN_ENCRYPTION_KEY` are configured in Vercel. Keep the encryption key secret and never commit it.
+6. Redeploy after setting the Google credentials.
 
-Google Drive requests full Drive access for the planned cross-drive manager. Google may require OAuth app verification before public release.
+Google OAuth may require app verification before public distribution. The current OAuth flow requests Drive access to support file management across accounts.
 
-## Security notes
-- Provider access/refresh tokens are encrypted server-side using AES-256-GCM.
-- The encryption key is stored as a Vercel sensitive environment variable.
-- Row Level Security is enabled on all public data tables.
-- Service-role credentials must never be exposed to the browser.
-- Do not treat dashboard sample file rows as live provider files. File listing, upload, download, copy/move and background sync are Phase 2.
+## Security
+- Provider access and refresh tokens are encrypted server-side using AES-256-GCM.
+- Encryption key is stored as a Vercel sensitive environment variable.
+- Supabase row-level security scopes account, file and transfer records by owner.
+- Never expose Supabase service-role credentials to the browser.
+- All Drive API routes verify the signed-in user and ownership of the connected account.
+- Resumable upload session URLs are stored only in owner-scoped server-side job records and never returned to the browser.
 
-## Current scope
-Authentication, workspace bootstrap, account connection scaffolding and live account quota metadata are Phase 1. File operations and sync workers are not yet enabled.
+## Known Phase 2 limits
+- Cross-account transfers currently support individual files up to 20 MB; folders and larger transfers need a durable background worker.
+- Google Sheets export defaults to CSV; other native Google file types export to PDF.
+- Smart collections are navigation shortcuts at this stage; automatic classification and deduplication are not enabled.
+- Automation center and team invitations are foundations for later releases, not active background automations.
+- The current implementation is Google Drive-first. Dropbox, OneDrive and other providers are future work.
