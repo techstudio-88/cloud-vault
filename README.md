@@ -11,7 +11,7 @@ CloudVault is a cloud workspace for browsing and organizing connected Google Dri
 - Provider token bundle encrypted server-side with AES-256-GCM
 - Live provider quota metadata and connected-account state
 
-## Phase 2 file engine
+## Phase 3 storage engine
 - Live Google Drive file and folder listing, folder navigation and provider-side filename search
 - Create folders and rename files
 - Move files to Google Drive trash (recoverable in the provider's Trash)
@@ -22,14 +22,14 @@ CloudVault is a cloud workspace for browsing and organizing connected Google Dri
 - Live provider quota refresh while browsing files
 - Responsive SaaS workspace: functional navigation, account picker, file list, upload dropzone, transfer modal, loading/empty/error states and mobile navigation
 
-## Phase 3 team and automation foundations
+## Phase 4 advanced engine
 - Email-bound workspace invitations with seven-day expiry and single-use acceptance
 - Owner-managed member role changes and invitation revocation
 - Workspace invitation acceptance requires an authenticated account whose email matches the invitation
 - Automation rule creation, listing, enable/pause and persisted hourly/daily/weekly scheduling metadata
 - Scheduled-rule indexes and run-status fields for the forthcoming durable worker
 
-## Local development
+## Phase 4 scheduler configuration\nThe hourly Vercel Cron endpoint is `/api/cron/automations`. Configure `CRON_SECRET` and `SUPABASE_SERVICE_ROLE_KEY` as sensitive Vercel environment variables for Production, Preview and Development. The worker fails closed when either is absent and validates the bearer secret before using the service-role client. Do not expose either value to the browser or commit them.\n\n## Local development
 Run `npm install`, then `npm run dev`.
 
 Copy `.env.example` to `.env.local`. Never commit real credentials.
@@ -62,5 +62,8 @@ Google OAuth may require app verification before public distribution. The curren
 - Cross-account transfers currently support individual files up to 20 MB; folders and larger transfers need a durable background worker.
 - Google Sheets export defaults to CSV; other native Google file types export to PDF.
 - Smart collections are navigation shortcuts at this stage; automatic classification and deduplication are not enabled.
-- Automation rules can be saved and enabled/paused, but they are not executed until the secure scheduled worker is deployed and configured.
+- Automation rules are persisted with run history and executed by the hourly scheduled worker when its required server secrets are configured.
+- Smart upload can route each file to the connected Google Drive with the most available capacity.
+- Duplicate finder compares provider MD5 checksums and file sizes across connected drives; it reports candidates but never deletes files automatically.
+- Folder-organization automation produces reviewable suggestions only; it never moves user files without explicit action.
 - The current implementation is Google Drive-first. Dropbox, OneDrive and other providers are future work.

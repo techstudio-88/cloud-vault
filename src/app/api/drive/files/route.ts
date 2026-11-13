@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getGoogleAccessToken,getOwnedGoogleAccount,googleFetch,logActivity } from "@/lib/drive/google";
 
 export const runtime="nodejs";
-const fields="files(id,name,mimeType,size,modifiedTime,webViewLink,parents,thumbnailLink,iconLink,trashed),nextPageToken";
+const fields="files(id,name,mimeType,size,modifiedTime,webViewLink,parents,thumbnailLink,iconLink,trashed,md5Checksum),nextPageToken";
 export async function GET(request:NextRequest) {
   try {
     const supabase=await createClient(); const {data:{user}}=await supabase.auth.getUser();
@@ -20,13 +20,13 @@ export async function GET(request:NextRequest) {
     const page=params.get("pageToken");if(page)url.searchParams.set("pageToken",page);
     const response=await fetch(url,{headers:{authorization:"Bearer "+token},cache:"no-store"});
     const payload=await response.json();if(!response.ok) return NextResponse.json({error:payload.error?.message??"Could not list Google Drive files."},{status:response.status});
-    const files=(payload.files??[]).map((f:{id:string;name:string;mimeType:string;size?:string;modifiedTime?:string;webViewLink?:string;parents?:string[];thumbnailLink?:string;iconLink?:string;trashed?:boolean})=>({...f,size:Number(f.size??0),isFolder:f.mimeType==="application/vnd.google-apps.folder"}));
+    const files=(payload.files??[]).map((f:{id:string;name:string;mimeType:string;size?:string;modifiedTime?:string;webViewLink?:string;parents?:string[];thumbnailLink?:string;iconLink?:string;trashed?:boolean;md5Checksum?:string})=>({...f,size:Number(f.size??0),isFolder:f.mimeType==="application/vnd.google-apps.folder"}));
     const quotaResponse=await fetch("https://www.googleapis.com/drive/v3/about?fields=storageQuota,user",{headers:{authorization:"Bearer "+token},cache:"no-store"});
     const about=quotaResponse.ok?await quotaResponse.json():{};
     const quota=about.storageQuota??{};
     if(quotaResponse.ok) await supabase.from("connected_accounts").update({storage_used_bytes:quota.usage?Number(quota.usage):null,storage_total_bytes:quota.limit?Number(quota.limit):null,last_synced_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq("id",account.id).eq("owner_id",user.id);
     const {data:workspace}=await supabase.from("workspaces").select("id").eq("owner_id",user.id).limit(1).maybeSingle();
-    if(files.length) await supabase.from("file_metadata").upsert(files.map((f:any)=>({owner_id:user.id,workspace_id:workspace?.id??null,connected_account_id:account.id,provider_file_id:f.id,parent_provider_file_id:f.parents?.[0]??null,name:f.name,mime_type:f.mimeType,size_bytes:f.size,is_folder:f.isFolder,trashed:false,modified_at:f.modifiedTime??null,web_view_url:f.webViewLink??null,synced_at:new Date().toISOString()})),{onConflict:"connected_account_id,provider_file_id"});
+    if(files.length) await supabase.from("file_metadata").upsert(files.map((f:any)=>({owner_id:user.id,workspace_id:workspace?.id??null,connected_account_id:account.id,provider_file_id:f.id,parent_provider_file_id:f.parents?.[0]??null,name:f.name,mime_type:f.mimeType,size_bytes:f.size,is_folder:f.isFolder,trashed:false,modified_at:f.modifiedTime??null,web_view_url:f.webViewLink??null,provider_md5_checksum:f.md5Checksum??null,synced_at:new Date().toISOString()})),{onConflict:"connected_account_id,provider_file_id"});
     await supabase.from("connected_accounts").update({last_synced_at:new Date().toISOString()}).eq("id",account.id);
     return NextResponse.json({files,nextPageToken:payload.nextPageToken??null,storageQuota:quota,account:{id:account.id,email:account.email,name:account.display_name}});
   } catch(e) { return NextResponse.json({error:e instanceof Error?e.message:"Could not load files."},{status:400}); }

@@ -23,14 +23,14 @@ function decryptTokenBundle(account: DriveAccount) {
   decipher.setAuthTag(Buffer.from(account.token_auth_tag,"base64"));
   return JSON.parse(Buffer.concat([decipher.update(Buffer.from(account.token_ciphertext,"base64")),decipher.final()]).toString("utf8")) as {access_token:string;refresh_token:string;scope?:string};
 }
-export async function getGoogleAccessToken(account: DriveAccount) {
+export async function getGoogleAccessToken(account: DriveAccount, databaseClient?: any) {
   const bundle=decryptTokenBundle(account);
   if(account.token_expires_at && new Date(account.token_expires_at).getTime()>Date.now()+90_000) return bundle.access_token;
   const response=await fetch("https://oauth2.googleapis.com/token",{method:"POST",headers:{"content-type":"application/x-www-form-urlencoded"},body:new URLSearchParams({client_id:process.env.GOOGLE_CLIENT_ID??"",client_secret:process.env.GOOGLE_CLIENT_SECRET??"",refresh_token:bundle.refresh_token,grant_type:"refresh_token"}),cache:"no-store"});
   const refreshed=await response.json();
   if(!response.ok || !refreshed.access_token) throw new Error("Google Drive authorization expired. Reconnect this account.");
   const next={...bundle,access_token:refreshed.access_token,scope:refreshed.scope??bundle.scope};
-  const supabase=await createClient();
+  const supabase=databaseClient ?? await createClient();
   const encrypted=encryptTokenBundle(JSON.stringify(next));
   const {error}=await supabase.from("connected_accounts").update({...encrypted,token_expires_at:new Date(Date.now()+Number(refreshed.expires_in??3600)*1000).toISOString(),updated_at:new Date().toISOString()}).eq("id",account.id).eq("owner_id",account.owner_id);
   if(error) throw new Error("Could not refresh the connected account securely.");
